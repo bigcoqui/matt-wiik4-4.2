@@ -22,21 +22,35 @@ using StringTools;
 class StoryMenuState extends MusicBeatState
 {
 	var scoreText:FlxText;
+
+	public static var weekFileNames:Array<String> = [
+	'wiik1',
+	'wiik2',
+	'wiik3',
+	'wiik4',
+	];
 	
 	var weekData:Array<Dynamic> = [
-		['Tutorial'],
 		['Light-It-Up','Ruckus','Target-Practice'],
 		['Sporting','Boxing-Match'],
 		['Fisticuffs','Wind-Up','Deathmatch','king-hit'],
-		['War-of-honour','Opponent','Combat','Endless-battle']
+		['War-of-honour','Opponent','Combat','Endless-battle']//,
+		//['purgatory','final-showdown']
+	];
+	var weekTextData:Array<Dynamic> = [
+		['Light It Up','Ruckus','Target Practice'],
+		['Sporting','Boxing Match'],
+		['Fisticuffs','Wind Up','Deathmatch','king hit'],
+		['War-of-honour','Opponent','Combat','Endless-battle'],
+		['purgatory','final showdown']
 	];
 
-	var curDifficulty:Int = 1;
+	var curDifficulty:Int = 2;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true];
 
 	var weekCharacters:Array<Dynamic> = [
-		['gf', 'bf', ''],
+		['matt', 'bf', 'gf'],
 		['matt', 'bf', 'gf'],
 		['matt', 'bf', 'gf'],
 		['matt', 'bf', 'gf'],
@@ -44,11 +58,11 @@ class StoryMenuState extends MusicBeatState
 	];
 
 	var weekNames:Array<String> = [
-		"",
 		"Matt's tuesday singing lessons",
 		"Matt is done wiith your shit",
 		"The true Finale",
-		"The true Art of War"
+		"The true Art of War",
+		"Bonus Songs"
 	];
 
 
@@ -307,10 +321,10 @@ class StoryMenuState extends MusicBeatState
 	{
 		curDifficulty += change;
 
-		if (curDifficulty < 0)
+		if (curDifficulty < 2)
 			curDifficulty = 2;
 		if (curDifficulty > 2)
-			curDifficulty = 0;
+			curDifficulty = 2;
 
 		sprDifficulty.offset.x = 0;
 
@@ -375,8 +389,8 @@ class StoryMenuState extends MusicBeatState
 		grpWeekCharacters.members[1].setCharacter(weekCharacters[curWeek][1]);
 		grpWeekCharacters.members[2].setCharacter(weekCharacters[curWeek][2]);
 
-		txtTracklist.text = "Tracks\n";
-		var stringThing:Array<String> = weekData[curWeek];
+		txtTracklist.text = "Tracks";
+		var stringThing:Array<String> = weekTextData[curWeek];
 
 		for (i in stringThing)
 			txtTracklist.text += "\n" + i;

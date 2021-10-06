@@ -26,6 +26,7 @@ class Note extends FlxSprite
 	public var modifiedByLua:Bool = false;
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
+	public var noteType:String = 'normal';
 
 	public var noteScore:Float = 1;
 
@@ -37,7 +38,7 @@ class Note extends FlxSprite
 
 	public var rating:String = "shit";
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?noteType:String = 'normal', ?noteSkin:String = 'normal')
 	{
 		super();
 
@@ -45,6 +46,7 @@ class Note extends FlxSprite
 			prevNote = this;
 
 		this.prevNote = prevNote;
+		this.noteType = noteType;
 		isSustainNote = sustainNote;
 
 		x += 50;
@@ -87,7 +89,24 @@ class Note extends FlxSprite
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
 			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
+				switch (noteType) {
+					case 'drop' | 'are' | 'you' | 'ready' | 'kill':
+						frames = Paths.getSparrowAtlas('indicators', 'shared');
+					case 'duet':
+						if (noteData == 1 || noteData == 3)
+							frames = Paths.getSparrowAtlas('notes/cerbera', 'shared');
+						else
+							frames = Paths.getSparrowAtlas('notes/' + noteSkin, 'shared');
+					case 'cerb':
+							frames = Paths.getSparrowAtlas('notes/cerbera', 'shared');
+					default:
+						frames = Paths.getSparrowAtlas('notes/' + noteSkin, 'shared');
+				}
+
+				animation.addByPrefix('arrowUP', 'arrowUP0');
+				animation.addByPrefix('arrowDOWN', 'arrowDOWN0');
+				animation.addByPrefix('arrowLEFT', 'arrowLEFT0');
+				animation.addByPrefix('arrowRIGHT', 'arrowRIGHT0');
 
 				animation.addByPrefix('greenScroll', 'green0');
 				animation.addByPrefix('redScroll', 'red0');
@@ -109,20 +128,41 @@ class Note extends FlxSprite
 				antialiasing = true;
 		}
 
-		switch (noteData)
-		{
-			case 0:
-				x += swagWidth * 0;
-				animation.play('purpleScroll');
-			case 1:
-				x += swagWidth * 1;
-				animation.play('blueScroll');
-			case 2:
-				x += swagWidth * 2;
+		switch (noteType) {
+			case 'drop':
 				animation.play('greenScroll');
-			case 3:
-				x += swagWidth * 3;
+			case 'are':
 				animation.play('redScroll');
+			case 'you':
+				animation.play('purpleScroll');
+			case 'ready':
+				animation.play('blueScroll');
+			case 'kill':
+				animation.play('arrowUP');
+			case '4':
+				animation.play('arrowDOWN');
+			case '5':
+				animation.play('arrowLEFT');
+			case '6':
+				animation.play('arrowRIGHT');
+			case '7':
+				animation.play('purplehold');
+			default:
+				switch (noteData)
+				{
+					case 0:
+						x += swagWidth * 0;
+						animation.play('purpleScroll');
+					case 1:
+						x += swagWidth * 1;
+						animation.play('blueScroll');
+					case 2:
+						x += swagWidth * 2;
+						animation.play('greenScroll');
+					case 3:
+						x += swagWidth * 3;
+						animation.play('redScroll');
+				}
 		}
 
 		// trace(prevNote);

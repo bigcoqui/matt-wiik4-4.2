@@ -12,6 +12,7 @@ class Character extends FlxSprite
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 	public var iconColor:String = "FF82d4f5";
+	public var noteSkin:String = 'normal';
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 
@@ -31,6 +32,7 @@ class Character extends FlxSprite
 		switch (curCharacter)
 		{
 			case 'gf':
+				noteSkin = 'normal';
 				// GIRLFRIEND CODE
 				tex = Paths.getSparrowAtlas('GF_assets');
 				frames = tex;
@@ -345,9 +347,10 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bfmii':
+				noteSkin = 'normal';
 				var tex = Paths.getSparrowAtlas('BOYFRIENDMII','shared');
 				frames = tex;
-				iconColor = 'FF0784de';
+				iconColor = 'FF32AED0';
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
 				animation.addByPrefix('dodge', 'boyfriend dodge', 24, false);
@@ -359,6 +362,9 @@ class Character extends FlxSprite
 				animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
 				animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
 				animation.addByPrefix('hit', 'BF hit', 20, false);
+				animation.addByPrefix('firstDeath', "BF dies", 24, false);
+				animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+				animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
 	
 				addOffset('idle', -5);
 				addOffset("singUP", -29, 27);
@@ -370,6 +376,8 @@ class Character extends FlxSprite
 				addOffset("singLEFTmiss", 12, 24);
 				addOffset("singDOWNmiss", -11, -19);
 				addOffset('firstDeath', 37, 11);
+				addOffset('deathLoop', 37, 5);
+				addOffset('deathConfirm', 37, 69);
 				addOffset('hit', -5);
 	
 				playAnim('idle');
@@ -391,8 +399,10 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
+				noteSkin = 'normal';
 				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
 				frames = tex;
+				iconColor = 'FF32AED0';
 
 				trace(tex.frames.length);
 
@@ -624,6 +634,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'matt':
+				noteSkin = 'matt';
 				tex = Paths.getSparrowAtlas('matt_assets','shared');
 				frames = tex;
 				iconColor = 'FFfe6601';
@@ -639,6 +650,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'mattmad':
+				noteSkin = 'mattangry';
 				tex = Paths.getSparrowAtlas('mattangry','shared');
 				frames = tex;
 				iconColor = 'FFc95000';
@@ -654,6 +666,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 				
 			case 'mattold':
+				noteSkin = 'matt';
 				tex = Paths.getSparrowAtlas('matt_old','shared');
 				frames = tex;
 				animation.addByPrefix('idle', "matt idle", 24);
@@ -668,6 +681,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 				
 			case 'mattbox':
+				noteSkin = 'mattWiik3';
 				tex = Paths.getSparrowAtlas('matt_box','shared');
 				frames = tex;
 				iconColor = 'FFffffff';
@@ -684,6 +698,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'mattchill':
+				noteSkin = 'mattWiik3';
 				tex = Paths.getSparrowAtlas('matt_chill','shared');
 				frames = tex;
 				iconColor = 'FFffffff';
@@ -702,6 +717,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 				
 			case 'matttko':
+				noteSkin = 'mattTko';
 				tex = Paths.getSparrowAtlas('matt_tko','shared');
 				frames = tex;
 				iconColor = 'FF33323d';
@@ -718,6 +734,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'mattfight':
+				noteSkin = 'mattangry';
                 tex = Paths.getSparrowAtlas('matt_sword','shared');
 				frames = tex;
 				iconColor = 'FFffa234';
@@ -735,6 +752,7 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 			case 'matttired':
+				noteSkin = 'mattTired';
                 tex = Paths.getSparrowAtlas('matt_tired','shared');
 				frames = tex;
 				iconColor = 'FFffa234';
@@ -753,6 +771,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'matthurt':
+				noteSkin = 'mattangry';
                 tex = Paths.getSparrowAtlas('matt_hurt','shared');
 				frames = tex;
 				iconColor = 'FFffab5e';
@@ -771,6 +790,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'matthurt2':
+				noteSkin = 'mattangry';
                 tex = Paths.getSparrowAtlas('matt_hurt2','shared');
 				frames = tex;
 				iconColor = 'FFffab5e';
@@ -799,6 +819,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'mart':
+				noteSkin = 'martLmao';
                 tex = Paths.getSparrowAtlas('mart_fartsetts','shared');
 				frames = tex;
 				
@@ -916,7 +937,37 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
-					case 'gf-mii':
+					case 'gfFC':
+					if (!animation.curAnim.name.startsWith('hair'))
+					{
+						danced = !danced;
+	
+						if (danced)
+							playAnim('danceRight');
+						else
+							playAnim('danceLeft');
+					}
+					case 'gfDM':
+					if (!animation.curAnim.name.startsWith('hair'))
+					{
+						danced = !danced;
+	
+						if (danced)
+							playAnim('danceRight');
+						else
+							playAnim('danceLeft');
+					}
+					case 'gfWU':
+					if (!animation.curAnim.name.startsWith('hair'))
+					{
+						danced = !danced;
+	
+						if (danced)
+							playAnim('danceRight');
+						else
+							playAnim('danceLeft');
+					}
+					case 'gfKH':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
 						danced = !danced;

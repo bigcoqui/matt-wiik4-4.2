@@ -1235,15 +1235,11 @@ class PlayState extends MusicBeatState
 		if (FlxG.save.data.downscroll)
 			kadeEngineWatermark.y = FlxG.height * 0.9 + 45;
 
-		scoreTxt = new FlxText(FlxG.width / 2 - 235, healthBarBG.y + 50, 0, "", 20);
-		if (!FlxG.save.data.accuracyDisplay)
-			scoreTxt.x = healthBarBG.x + healthBarBG.width / 2;
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 700, healthBarBG.y + 50, 800, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
-		if (offsetTesting)
-			scoreTxt.x += 300;
-		if(FlxG.save.data.botplay) scoreTxt.x = FlxG.width / 2 - 20;													  
 		add(scoreTxt);
+
 
 		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "REPLAY", 20);
 		replayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
@@ -1758,8 +1754,13 @@ trace("Interesting");
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 				else
 					oldNote = null;
-
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
+				var daType = songNotes[3];
+				var swagNote:Note;
+				if (gottaHitNote) {
+					swagNote = new Note(daStrumTime, daNoteData, oldNote, false, daType, boyfriend.noteSkin);
+				} else {
+					swagNote = new Note(daStrumTime, daNoteData, oldNote, false, daType, dad.noteSkin);
+				}
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
 
@@ -1771,20 +1772,35 @@ trace("Interesting");
 				for (susNote in 0...Math.floor(susLength))
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
-
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
+					var sustainNote:Note;
+					if (gottaHitNote) {
+						sustainNote = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true, daType, boyfriend.noteSkin);
+					} else {
+						sustainNote = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true, daType, dad.noteSkin);
+					}
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
 					sustainNote.mustPress = gottaHitNote;
+
+					switch (sustainNote.noteType) {
+						case 'drop' | 'are' | 'you' | 'ready' | 'kill' | '4' | '5' | '6' | '7':
+							sustainNote.mustPress = false;
+						default:
+							sustainNote.mustPress = gottaHitNote;
+					}
 
 					if (sustainNote.mustPress)
 					{
 						sustainNote.x += FlxG.width / 2; // general offset
 					}
 				}
-
-				swagNote.mustPress = gottaHitNote;
+				switch (swagNote.noteType) {
+					case 'drop' | 'are' | 'you' | 'ready' | 'kill' | '4' | '5' | '6' | '7':
+						swagNote.mustPress = false;
+					default:
+						swagNote.mustPress = gottaHitNote;
+				}
 
 				if (swagNote.mustPress)
 				{
@@ -1855,7 +1871,12 @@ trace("Interesting");
 					}
 				
 				case 'normal':
-					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+					if (player == 0)
+						babyArrow.frames = Paths.getSparrowAtlas('notes/' + dad.noteSkin, 'shared');
+					else if (player == 2) 
+						babyArrow.frames = Paths.getSparrowAtlas('notes/cerbera', 'shared');
+					else 
+						babyArrow.frames = Paths.getSparrowAtlas('notes/' + boyfriend.noteSkin, 'shared');
 					babyArrow.animation.addByPrefix('green', 'arrowUP');
 					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
 					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
@@ -1889,7 +1910,12 @@ trace("Interesting");
 						}
 
 				default:
-					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+					if (player == 0)
+						babyArrow.frames = Paths.getSparrowAtlas('notes/' + dad.noteSkin, 'shared');
+					else if (player == 2) 
+						babyArrow.frames = Paths.getSparrowAtlas('notes/cerbera', 'shared');
+					else 
+						babyArrow.frames = Paths.getSparrowAtlas('notes/' + boyfriend.noteSkin, 'shared');
 					babyArrow.animation.addByPrefix('green', 'arrowUP');
 					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
 					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
@@ -2142,9 +2168,9 @@ trace("Interesting");
 
 		super.update(elapsed);
 
-		scoreTxt.text = Ratings.CalculateRanking(songScore,songScoreDef,nps,maxNPS,accuracy);
+		scoreTxt.text = "Score:" + songScore + " | Misses:" + misses + " | Combo:" + combo + " | Accuracy:" + HelperFunctions.truncateFloat(accuracy, 2) + "% | Health:" + Math.round(health * 50) + "% | " + Ratings.GenerateLetterRank(accuracy);
 		if (!FlxG.save.data.accuracyDisplay)
-			scoreTxt.text = "Score: " + songScore;
+			scoreTxt.text = "Score:" + songScore + " | Misses:" + misses + " | Accuracy:" + HelperFunctions.truncateFloat(accuracy, 2) + "% | " + Ratings.GenerateLetterRank(accuracy);
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -2193,6 +2219,9 @@ trace("Interesting");
 
 		if (health > 2)
 			health = 2;
+
+		if (accuracy > 100.00)
+			accuracy = 100.00;
 		if (healthBar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
 		else
@@ -2659,7 +2688,6 @@ trace("Interesting");
 
 							}
 
-						if (FlxG.save.data.cpuStrums)
 						{
 							cpuStrums.forEach(function(spr:FlxSprite)
 							{
@@ -2746,7 +2774,6 @@ trace("Interesting");
 				});
 			}
 
-		if (FlxG.save.data.cpuStrums)
 		{
 			cpuStrums.forEach(function(spr:FlxSprite)
 			{
@@ -2830,7 +2857,7 @@ trace("Interesting");
 					transIn = FlxTransitionableState.defaultTransIn;
 					transOut = FlxTransitionableState.defaultTransOut;
 
-					FlxG.switchState(new StoryMenuState());
+					FlxG.switchState(new EndingState());
 
 					#if windows
 					if (luaModchart != null)
@@ -2943,20 +2970,15 @@ trace("Interesting");
 			switch(daRating)
 			{
 				case 'shit':
-					score = -300;
-					combo = 0;
-					misses++;
-					health -= 0.1;
+					score = 300;
 					ss = false;
 					shits++;
-					if (FlxG.save.data.accuracyMod == 0)
 						totalNotesHit += 0.25;
 				case 'bad':
 					daRating = 'bad';
 					score = 0;
 					ss = false;
 					bads++;
-					if (FlxG.save.data.accuracyMod == 0)
 						totalNotesHit += 0.50;
 				case 'good':
 					daRating = 'good';
@@ -2969,16 +2991,15 @@ trace("Interesting");
 								{
 									health += 0.06;
 								}
-					if (FlxG.save.data.accuracyMod == 0)
 						totalNotesHit += 0.75;
 				case 'sick':
+					score = 300;
 					if (health < 2)
 						health += 0.1;
 								if (SONG.notes[Math.floor(curStep / 16)].altAnim)
 								{
 									health += 0.06;
 								}
-					if (FlxG.save.data.accuracyMod == 0)
 						totalNotesHit += 1;
 					sicks++;
 			}

@@ -41,8 +41,8 @@ class HealthIcon extends FlxSprite
 		animation.add('mattbox', [26, 27], 0, false, isPlayer);
 		animation.add('mattchill', [24, 25], 0, false, isPlayer);
         animation.add('matttko', [24, 25], 0, false, isPlayer);
-		animation.add('bfmii', [0, 1], 0, false, isPlayer);
-		animation.add('mart', [11, 12], 0, false, isPlayer);
+		animation.add('bfmii', [34, 35], 0, false, isPlayer);
+		animation.add('mart', [10, 11], 0, false, isPlayer);
 		animation.add('mattfight', [30, 31], 0, false, isPlayer);
 		animation.add('matttired', [30, 31], 0, false, isPlayer);
 		animation.add('matthurt', [32, 33], 0, false, isPlayer);

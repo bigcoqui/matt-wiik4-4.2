@@ -119,6 +119,26 @@ class CpuStrums extends Option
 
 }
 
+class StepManiaOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	public override function press():Bool
+	{
+		FlxG.save.data.stepMania = !FlxG.save.data.stepMania;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Colors by quantization " + (!FlxG.save.data.stepMania ? "off" : "on");
+	}
+}
+
 class DownscrollOption extends Option
 {
 	public function new(desc:String)
@@ -136,7 +156,7 @@ class DownscrollOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return FlxG.save.data.downscroll ? "Downscroll" : "Upscroll";
+		return FlxG.save.data.downscroll ? "Downscroll on" : "Downscroll off";
 	}
 }
 
@@ -157,7 +177,7 @@ class GhostTapOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return FlxG.save.data.ghost ? "Ghost Tapping" : "No Ghost Tapping";
+		return FlxG.save.data.ghost ? "New Input" : "Old Input";
 	}
 }
 
@@ -177,7 +197,7 @@ class AccuracyOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "Accuracy " + (!FlxG.save.data.accuracyDisplay ? "off" : "on");
+		return "Accuracy " + (!FlxG.save.data.accuracyDisplay ? "simple" : "complex");
 	}
 }
 
@@ -305,7 +325,10 @@ class Judgement extends Option
 
 	override function right():Bool {
 
-		if (Conductor.safeFrames == 20)
+		//if (Conductor.safeFrames == 20)
+			//return false;
+
+		if (Conductor.safeFrames == 30)
 			return false;
 
 		Conductor.safeFrames += 1;

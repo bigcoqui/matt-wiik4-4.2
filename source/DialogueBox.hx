@@ -273,10 +273,30 @@ class DialogueBox extends FlxSpriteGroup
 			portraitRight.visible = false;
 		}	
 		
-		if (PlayState.SONG.song.toLowerCase()=='light-it-up' || PlayState.SONG.song.toLowerCase()=='ruckus' || PlayState.SONG.song.toLowerCase()=='target-practice' || PlayState.SONG.song.toLowerCase()=='sporting' || PlayState.SONG.song.toLowerCase()=='boxing-match' || PlayState.SONG.song.toLowerCase()=='fisticuffs' || PlayState.SONG.song.toLowerCase()=='deathmatch' || PlayState.SONG.song.toLowerCase()=='wind-up')
+		if (PlayState.SONG.song.toLowerCase()=='light-it-up' || PlayState.SONG.song.toLowerCase()=='ruckus' || PlayState.SONG.song.toLowerCase()=='target-practice' || PlayState.SONG.song.toLowerCase()=='fisticuffs' || PlayState.SONG.song.toLowerCase()=='deathmatch' || PlayState.SONG.song.toLowerCase()=='wind-up')
 		{
 			portraitLeft = new FlxSprite(30,250);
 			portraitLeft.frames = Paths.getSparrowAtlas('matt-portrait');
+			portraitLeft.animation.addByPrefix('enter', 'matt portrait', 24, false);
+			portraitLeft.setGraphicSize(Std.int(portraitLeft.width * 0.5));
+			portraitLeft.updateHitbox();
+			portraitLeft.scrollFactor.set();
+			add(portraitLeft);
+			portraitLeft.visible = false;
+		
+			portraitRight = new FlxSprite(800,250);
+			portraitRight.frames = Paths.getSparrowAtlas('boyfriend-portrait');
+			portraitRight.animation.addByPrefix('enter', 'boyfriend-portrait', 24, false);
+			portraitRight.setGraphicSize(Std.int(portraitRight.width * 0.5));
+			portraitRight.updateHitbox();
+			portraitRight.scrollFactor.set();
+			add(portraitRight);
+			portraitRight.visible = false;
+		} 
+		if (PlayState.SONG.song.toLowerCase()=='sporting' || PlayState.SONG.song.toLowerCase()=='boxing-match')
+		{
+			portraitLeft = new FlxSprite(30,250);
+			portraitLeft.frames = Paths.getSparrowAtlas('mattangry-portrait');
 			portraitLeft.animation.addByPrefix('enter', 'matt portrait', 24, false);
 			portraitLeft.setGraphicSize(Std.int(portraitLeft.width * 0.5));
 			portraitLeft.updateHitbox();

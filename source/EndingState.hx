@@ -2,6 +2,7 @@ package;
 import flixel.*;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import android.FlxVirtualPad;
 
 /**
  * ...
@@ -10,14 +11,12 @@ import flixel.util.FlxTimer;
 
 class EndingState extends FlxState
 {
-
 	var _goodEnding:Bool = false;
 	
 	public function new(goodEnding:Bool = true) 
 	{
 		super();
 		_goodEnding = goodEnding;
-		
 	}
 	
 	override public function create():Void 
@@ -46,24 +45,22 @@ class EndingState extends FlxState
 				end.loadGraphic(Paths.image("ending4"));
 			add(end);
 
-			#if android
-			addVirtualPad(NONE, A);
-			#end
+      _pad = new FlxVirtualPad(NONE, A);
+      _pad.alpha = 0.75;
+      this.add(_pad);
 	}
-			
+
 	override public function update(elapsed:Float):Void 
 	{
 		super.update(elapsed);
 		
-		if (controls.ACCEPT){
+		if (FlxG.keys.justPressed.ENTER || _pad.buttonA.justPressed){
 			endIt();
 	}
-	
-	
+
 	}public function endIt(e:FlxTimer=null)
 	{
 		trace("ENDING");
 		FlxG.switchState(new StoryMenuState());
 	}
-	
 }

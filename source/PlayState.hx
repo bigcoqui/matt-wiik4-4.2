@@ -1489,7 +1489,7 @@ trace("Interesting");
 	function startCountdown():Void
 	{
 		#if android
-		androidControls.visible = true;
+		androidc.visible = true;
 		#end
 
 		inCutscene = false;
@@ -2806,7 +2806,7 @@ trace("Interesting");
 	function endSong():Void
 	{
 		#if android
-		androidControls.visible = false;
+		androidc.visible = false;
 		#end
 
 		FlxG.save.data.botplay = false;

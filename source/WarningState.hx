@@ -14,11 +14,15 @@ class WarningState extends MusicBeatState
 		bg.loadGraphic(Paths.image("startup"));
 		add(bg);
 		bg.screenCenter();
+
+		#if android
+		addVirtualPad(NONE, A);
+		#end
 	}
 	override function update(elapsed:Float) 
 	{
 		super.update(elapsed);
-		if (FlxG.keys.justPressed.ENTER){
+		if (controls.ACCEPT){
 			FlxG.switchState(new MainMenuState());
 		}
 	}

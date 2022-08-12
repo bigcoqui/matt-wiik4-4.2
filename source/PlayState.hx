@@ -1067,10 +1067,7 @@ class PlayState extends MusicBeatState
 				boyfriend.x += 200;
 				
 			case 'boxKH':
-			
 				boyfriend.x += 200;
-			
-			case 'boxKH':
 			
 				boyfriend.x += 200;
 			case 'boxTKO':

@@ -12,6 +12,8 @@ import android.FlxVirtualPad;
 class EndingState extends FlxState
 {
 	var _goodEnding:Bool = false;
+
+	var _pad:FlxVirtualPad;
 	
 	public function new(goodEnding:Bool = true) 
 	{

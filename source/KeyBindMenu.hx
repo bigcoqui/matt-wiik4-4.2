@@ -26,7 +26,6 @@ import flixel.text.FlxText;
 import flixel.input.FlxKeyManager;
 import android.FlxVirtualPad;
 
-
 using StringTools;
 
 class KeyBindMenu extends FlxSubState
@@ -98,7 +97,7 @@ class KeyBindMenu extends FlxSubState
 
         textUpdate();
 
-        _pad = new FlxVirtualpad(UP_DOWN, A_B_C);
+        _pad = new FlxVirtualPad(NONE, A_B_C);
         _pad.alpha = 0.75;
         this.add(_pad);
 
@@ -111,19 +110,19 @@ class KeyBindMenu extends FlxSubState
         switch(state){
 
             case "select":
-                if (controls.UP_P)
+                if (FlxG.keys.justPressed.UP)
 				{
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					changeItem(-1);
 				}
 
-				if (controls.DOWN_P)
+				if (FlxG.keys.justPressed.DOWN)
 				{
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					changeItem(1);
 				}
 
-                if (controls.ACCEPT){
+                if (FlxG.keys.justPressed.ENTER || _pad.buttonA.justPressed){
                     FlxG.sound.play(Paths.sound('scrollMenu'));
                     state = "input";
                 }
@@ -146,7 +145,7 @@ class KeyBindMenu extends FlxSubState
                     state = "select";
                     FlxG.sound.play(Paths.sound('confirmMenu'));
                 }
-                else if(controls.ACCEPT){
+                else if(FlxG.keys.justPressed.ENTER || _pad.buttonA.justPressed){
                     addKey(defaultKeys[curSelected]);
                     save();
                     state = "select";

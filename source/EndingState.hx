@@ -45,13 +45,17 @@ class EndingState extends FlxState
 			if (PlayState.storyWeek == 3 && PlayState.storyDifficulty == 2)	
 				end.loadGraphic(Paths.image("ending4"));
 			add(end);
+
+			#if android
+			addVirtualPad(NONE, A);
+			#end
 	}
 			
 	override public function update(elapsed:Float):Void 
 	{
 		super.update(elapsed);
 		
-		if (FlxG.keys.pressed.ENTER){
+		if (controls.ACCEPT){
 			endIt();
 	}
 	

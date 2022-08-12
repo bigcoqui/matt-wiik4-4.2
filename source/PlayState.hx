@@ -1280,6 +1280,10 @@ class PlayState extends MusicBeatState
 		if (loadRep)
 			replayTxt.cameras = [camHUD];
 
+		#if android
+		addAndroidControls();
+		#end
+
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -1484,6 +1488,10 @@ trace("Interesting");
 
 	function startCountdown():Void
 	{
+		#if android
+		androidControls.visible = true;
+		#end
+
 		inCutscene = false;
 
 		generateStaticArrows(0);
@@ -2172,7 +2180,7 @@ trace("Interesting");
 		if (!FlxG.save.data.accuracyDisplay)
 			scoreTxt.text = "Score:" + songScore + " | Misses:" + misses + " | Accuracy:" + HelperFunctions.truncateFloat(accuracy, 2) + "% | " + Ratings.GenerateLetterRank(accuracy);
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+		if (FlxG.keys.justPressed.ENTER #if android || FlxG.android.justReleased.BACK #end && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -2797,14 +2805,13 @@ trace("Interesting");
 
 	function endSong():Void
 	{
-		if (!loadRep)
-			rep.SaveReplay(saveNotes);
-		else
-		{
-			FlxG.save.data.botplay = false;
-			FlxG.save.data.scrollSpeed = 1;
-			FlxG.save.data.downscroll = false;
-		}
+		#if android
+		androidControls.visible = false;
+		#end
+
+		FlxG.save.data.botplay = false;
+		FlxG.save.data.scrollSpeed = 1;
+		FlxG.save.data.downscroll = false;
 
 		if (FlxG.save.data.fpsCap > 290)
 			(cast (Lib.current.getChildAt(0), Main)).setFPSCap(290);

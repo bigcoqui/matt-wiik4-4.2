@@ -24,6 +24,7 @@ import lime.utils.Assets;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.input.FlxKeyManager;
+import android.FlxVirtualPad;
 
 
 using StringTools;
@@ -50,6 +51,8 @@ class KeyBindMenu extends FlxSubState
     var infoText:FlxText;
 
     var state:String = "select";
+
+    var _pad:FlxVirtualPad;
 
 	override function create()
 	{	
@@ -95,6 +98,10 @@ class KeyBindMenu extends FlxSubState
 
         textUpdate();
 
+        _pad = new FlxVirtualpad(UP_DOWN, A_B_C);
+        _pad.alpha = 0.75;
+        this.add(_pad);
+
 		super.create();
 	}
 
@@ -104,26 +111,26 @@ class KeyBindMenu extends FlxSubState
         switch(state){
 
             case "select":
-                if (FlxG.keys.justPressed.UP)
+                if (controls.UP_P)
 				{
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					changeItem(-1);
 				}
 
-				if (FlxG.keys.justPressed.DOWN)
+				if (controls.DOWN_P)
 				{
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					changeItem(1);
 				}
 
-                if (FlxG.keys.justPressed.ENTER){
+                if (controls.ACCEPT){
                     FlxG.sound.play(Paths.sound('scrollMenu'));
                     state = "input";
                 }
-                else if(FlxG.keys.justPressed.ESCAPE){
+                else if(FlxG.keys.justPressed.ESCAPE || _pad.buttonB.justPressed){
                     quit();
                 }
-				else if (FlxG.keys.justPressed.BACKSPACE){
+				else if (FlxG.keys.justPressed.BACKSPACE || _pad.buttonC.justPressed){
                     reset();
                 }
 
@@ -134,12 +141,12 @@ class KeyBindMenu extends FlxSubState
                 state = "waiting";
 
             case "waiting":
-                if(FlxG.keys.justPressed.ESCAPE){
+                if(FlxG.keys.justPressed.ESCAPE || _pad.buttonB.justPressed){
                     keys[curSelected] = tempKey;
                     state = "select";
                     FlxG.sound.play(Paths.sound('confirmMenu'));
                 }
-                else if(FlxG.keys.justPressed.ENTER){
+                else if(controls.ACCEPT){
                     addKey(defaultKeys[curSelected]);
                     save();
                     state = "select";

@@ -222,14 +222,6 @@ class DialogueBox extends FlxSpriteGroup
 				box.y = FlxG.height - box.height + 50;
 				box.x = box.x - 20;
 
-			case 'combat':
-				hasDialog = true;
-				box.frames = Paths.getSparrowAtlas('speech_bubble_talking');
-				box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
-				box.animation.addByIndices('normal', 'speech bubble normal', [4], "", 24);
-				box.y = FlxG.height - box.height + 50;
-				box.x = box.x - 20;
-
 			case 'final-showdown':
 				hasDialog = true;
 				box.frames = Paths.getSparrowAtlas('speech_bubble_talking');

@@ -131,6 +131,9 @@
 
 	<haxedef name="HXCPP_GC_BIG_BLOCKS"/>
 
+	<!--Android-Audio-Capture-thing-->
+	<android permission="android.permission.CAPTURE_AUDIO_OUTPUT"/>
+
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->

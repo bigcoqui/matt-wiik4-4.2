@@ -140,22 +140,12 @@ end
 function start (song)
     hudX = getHudX()
     hudY = getHudY()
-
-	BlackFade = makeSprite('BlackFade','blackfade', false)
-
-	setActorX(350,'blackfade')
-	setActorY(500,'blackfade')
-	setActorAlpha(0,'blackfade')
-	setActorScale(2,'blackfade')
 end
 
 function stepHit (step)
     if step == 1 then
 		showOnlyStrums = true
 	end
-	if step == 2371 then
-		tweenFadeIn(BlackFade,1,0.01)	
-        end
 	if step == 2369 then
 		strumLine1Visible = true
         end
@@ -165,9 +155,6 @@ function stepHit (step)
 			tweenPosYAngle(i, _G['defaultStrum'..i..'Y'], 0, 0.6, 'setDefault')
 		end
     end
-	if step == 2625 then
-		tweenFadeOut(BlackFade,0,0.01)	
-	end
 	if step == 834 then
 		swayingdown = true
 		camerabeat = true
